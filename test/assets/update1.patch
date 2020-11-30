@@ -1,0 +1,6 @@
+From 0000000000000000000000000000000000000000
+
+diff --git a/file b/file
+@@ -
++key1=value2
+-key1=value1

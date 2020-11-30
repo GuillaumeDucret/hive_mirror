@@ -1,0 +1,17 @@
+name: hive_mirror
+description: A new Dart package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.8.0 <3.0.0"
+
+dependencies:
+  async: ^2.4.2
+  isolate: ^2.0.3
+  hive: ^1.4.4
+
+dev_dependencies:
+  test: ^1.15.4
+  mockito: ^4.1.3
