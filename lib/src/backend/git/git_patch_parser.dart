@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'git_patch.dart';
+
 class Commit {
   final String revision;
   final diffs = <Diff>[];
@@ -22,12 +24,15 @@ class Chunk {
 
 class _GitPatchParserSink implements EventSink<String> {
   final EventSink<Commit> _sink;
-
-  _GitPatchParserSink(this._sink);
+  final Filter _filter;
 
   Commit _commit;
   Diff _diff;
   Chunk _chunk;
+
+  _GitPatchParserSink(EventSink<Commit> sink, {Filter filter})
+      : _sink = sink,
+        _filter = filter ?? (() => true);
 
   void add(String line) {
     if (line.startsWith('From ')) {
@@ -83,7 +88,9 @@ class _GitPatchParserSink implements EventSink<String> {
 
       if (match != null) {
         final path = match.group(1);
-        _diff = Diff(path);
+        if (_filter(path)) {
+          _diff = Diff(path);
+        }
       }
     }
   }
@@ -126,6 +133,11 @@ class _GitPatchParserSink implements EventSink<String> {
 }
 
 class GitPatchParser extends StreamTransformerBase<String, Commit> {
+  final Filter filter;
+
+  GitPatchParser({this.filter});
+
   Stream<Commit> bind(Stream<String> stream) => Stream<Commit>.eventTransformed(
-      stream, (EventSink<Commit> sink) => _GitPatchParserSink(sink));
+      stream,
+      (EventSink<Commit> sink) => _GitPatchParserSink(sink, filter: filter));
 }

@@ -23,7 +23,7 @@ class GitMirrorManager implements MirrorManager {
         .format(revision)
         .transform(Utf8Decoder())
         .transform(LineSplitter())
-        .transform(GitPatchParser());
+        .transform(GitPatchParser(filter: patch.filter));
 
     try {
       await for (Commit commit in commits) {
