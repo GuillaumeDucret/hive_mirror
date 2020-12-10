@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
 
-import 'hive_mirror.dart';
+import '../hive_mirror.dart';
 
 class BoxMirrorHandler<T> implements MirrorHandler<T> {
   final String name;
   final String path;
-  LazyBox _box;
+  LazyBox<T> _box;
 
   BoxMirrorHandler(this.name, {this.path});
 
@@ -14,7 +14,7 @@ class BoxMirrorHandler<T> implements MirrorHandler<T> {
 
   @override
   Future<void> init() async {
-    _box = await Hive.openLazyBox(name, path: path);
+    _box = await Hive.openLazyBox<T>(name, path: path);
   }
 
   @override

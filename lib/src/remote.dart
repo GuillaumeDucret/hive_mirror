@@ -1,7 +1,8 @@
 import 'package:hive/hive.dart';
-import 'package:hive_mirror/src/backend/mirror_manager.dart';
-import 'package:hive_mirror/src/hive_mirror.dart';
-import 'package:hive_mirror/src/metadata.dart';
+
+import 'backend/mirror_manager.dart';
+import 'hive_mirror.dart';
+import 'metadata.dart';
 
 abstract class Remote {
   static void init(InitMessage message) {

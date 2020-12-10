@@ -1,4 +1,4 @@
-import 'package:hive_mirror/src/hive_mirror.dart';
+import '../hive_mirror.dart';
 
 class MirrorHandlerHolder {
   final MirrorHandler _held;

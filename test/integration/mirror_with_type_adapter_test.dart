@@ -14,7 +14,7 @@ void main() {
 
       final source = Add2Remove1Patch.testType();
 
-      await HiveMirror.mirror(source, BoxMirrorHandler('box'));
+      await HiveMirror.mirror(source, BoxMirrorHandler<TestType>('box'));
 
       final box = await Hive.openBox<TestType>('box');
       expect(box.get('key1').value, equals('value1'));

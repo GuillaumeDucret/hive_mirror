@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:async/async.dart';
 
 abstract class GitPatchInterface {
-  Stream<List<int>> format(String revision);
-  bool filter(String fileName);
-  dynamic decode(String fileName, String line);
-  dynamic decodeKey(String fileName, String line);
+  Stream<List<int>> format([String baseRevision]);
+  bool filter(String filePath);
+  dynamic decode(String filePath, String line);
+  dynamic decodeKey(String filePath, String line);
 }
 
 class GitPatch implements GitPatchInterface {
-  final String _uriTemplate;
   final File _file;
+  final String _uriTemplate;
+  final String _initialBaseRevision;
   final Filter _filter;
   final Decode _decode;
   final DecodeKey _decodeKey;
@@ -19,35 +20,50 @@ class GitPatch implements GitPatchInterface {
   GitPatch.file(File file, {Filter filter, Decode decode, DecodeKey decodeKey})
       : _file = file,
         _uriTemplate = null,
-        _filter = filter ?? (() => true),
+        _initialBaseRevision = null,
+        _filter = filter,
         _decode = decode,
         _decodeKey = decodeKey;
 
   GitPatch.uri(String uriTemplate,
-      {Filter filter, Decode decode, DecodeKey decodeKey})
+      {String initialBaseRevision = 'initial',
+      Filter filter,
+      Decode decode,
+      DecodeKey decodeKey})
       : _file = null,
         _uriTemplate = uriTemplate,
-        _filter = filter ?? (() => true),
+        _initialBaseRevision = initialBaseRevision,
+        _filter = filter,
         _decode = decode,
         _decodeKey = decodeKey;
 
   factory GitPatch.githubCompareView(String userName, String repoName,
-      {Filter filter, Decode decode, DecodeKey decodeKey}) {
+      {String initialBaseRevision = 'initial',
+      String compareRevision = 'master',
+      Filter filter,
+      Decode decode,
+      DecodeKey decodeKey}) {
     final _uriTemplate =
-        'https://github.com/$userName/$repoName/compare/\$revision..master.patch';
+        'https://github.com/$userName/$repoName/compare/\$baseRevision..$compareRevision.patch';
     return GitPatch.uri(_uriTemplate,
-        filter: filter, decode: decode, decodeKey: decodeKey);
+        initialBaseRevision: initialBaseRevision,
+        filter: filter,
+        decode: decode,
+        decodeKey: decodeKey);
   }
 
   @override
-  Stream<List<int>> format(String revision) {
+  Stream<List<int>> format([String baseRevision]) {
+    baseRevision ??= _initialBaseRevision;
+
     if (_file != null) {
       return _file.openRead();
     }
 
     if (_uriTemplate != null) {
       return LazyStream(() async {
-        final uri = Uri.parse(_uriTemplate.replaceAll('\$revision', revision));
+        final uri =
+            Uri.parse(_uriTemplate.replaceAll('\$baseRevision', baseRevision));
         final request = await HttpClient().getUrl(uri);
         return request.close();
       });
@@ -57,15 +73,15 @@ class GitPatch implements GitPatchInterface {
   }
 
   @override
-  bool filter(String fileName) => _filter(fileName);
+  bool filter(String filePath) => _filter?.call(filePath) ?? true;
 
   @override
-  dynamic decode(String fileName, String line) => _decode(fileName, line);
+  dynamic decode(String filePath, String line) => _decode(filePath, line);
 
   @override
-  dynamic decodeKey(String fileName, String line) => _decodeKey(fileName, line);
+  dynamic decodeKey(String filePath, String line) => _decodeKey(filePath, line);
 }
 
-typedef Filter = bool Function(String fileName);
-typedef Decode = dynamic Function(String fileName, String line);
-typedef DecodeKey = dynamic Function(String fileName, String line);
+typedef bool Filter(String filePath);
+typedef dynamic Decode(String filePath, String line);
+typedef dynamic DecodeKey(String filePath, String line);

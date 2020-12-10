@@ -32,8 +32,9 @@ class _GitPatchParserSink implements EventSink<String> {
 
   _GitPatchParserSink(EventSink<Commit> sink, {Filter filter})
       : _sink = sink,
-        _filter = filter ?? (() => true);
+        _filter = filter;
 
+  @override
   void add(String line) {
     if (line.startsWith('From ')) {
       _exitChunk();
@@ -54,10 +55,12 @@ class _GitPatchParserSink implements EventSink<String> {
     }
   }
 
+  @override
   void addError(e, [st]) {
     _sink.addError(e, st);
   }
 
+  @override
   void close() {
     _exitChunk();
     _exitDiff();
@@ -88,7 +91,7 @@ class _GitPatchParserSink implements EventSink<String> {
 
       if (match != null) {
         final path = match.group(1);
-        if (_filter(path)) {
+        if (_filter?.call(path) ?? true) {
           _diff = Diff(path);
         }
       }
@@ -133,11 +136,11 @@ class _GitPatchParserSink implements EventSink<String> {
 }
 
 class GitPatchParser extends StreamTransformerBase<String, Commit> {
-  final Filter filter;
+  final Filter _filter;
 
-  GitPatchParser({this.filter});
+  GitPatchParser({filter}) : _filter = filter;
 
   Stream<Commit> bind(Stream<String> stream) => Stream<Commit>.eventTransformed(
       stream,
-      (EventSink<Commit> sink) => _GitPatchParserSink(sink, filter: filter));
+      (EventSink<Commit> sink) => _GitPatchParserSink(sink, filter: _filter));
 }

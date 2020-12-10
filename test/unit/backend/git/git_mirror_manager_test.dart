@@ -12,7 +12,7 @@ void main() {
     test('with addition and removal', () async {
       final handler = MirrorHandlerMock();
       final metadata = MetadataMock();
-      final manager = GitMirrorManager(handler, metadata);
+      final manager = GitMirrorManager.withHandler(handler, metadata);
 
       await manager.applyPatch(Add2Remove1Patch.primitive());
 
@@ -24,7 +24,7 @@ void main() {
     test('with update', () async {
       final handler = MirrorHandlerMock();
       final metadata = MetadataMock();
-      final manager = GitMirrorManager(handler, metadata);
+      final manager = GitMirrorManager.withHandler(handler, metadata);
 
       await manager.applyPatch(Update1Patch.primitive());
 
@@ -36,7 +36,7 @@ void main() {
     test('with several diffs', () async {
       final handler = MirrorHandlerMock();
       final metadata = MetadataMock();
-      final manager = GitMirrorManager(handler, metadata);
+      final manager = GitMirrorManager.withHandler(handler, metadata);
 
       await manager.applyPatch(Diff2Patch.primitive());
 
@@ -49,7 +49,7 @@ void main() {
     test('with skipped diff', () async {
       final handler = MirrorHandlerMock();
       final metadata = MetadataMock();
-      final manager = GitMirrorManager(handler, metadata);
+      final manager = GitMirrorManager.withHandler(handler, metadata);
 
       await manager.applyPatch(
           Diff2Patch.primitive(filter: (fn) => fn != Diff2Patch.fileName2));

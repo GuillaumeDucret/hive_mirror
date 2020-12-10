@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 abstract class HiveMirrorInterface {
   void init(String path);
   void registerAdapter<T>(TypeAdapter<T> adapter);
-  Future<void> mirror(dynamic source, MirrorHandler handler);
+  Future<void> mirror<T>(dynamic source, MirrorHandler<T> handler);
 }
 
 abstract class MirrorHandler<T> {

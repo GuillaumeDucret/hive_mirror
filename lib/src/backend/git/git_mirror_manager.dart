@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import '../../handler_holder.dart';
+import '../../handlers/dynamic_mirror_handler.dart';
+import '../../handlers/handler_holder.dart';
 import '../../hive_mirror.dart';
 import '../../metadata.dart';
 import '../mirror_manager.dart';
@@ -15,12 +16,17 @@ class GitMirrorManager implements MirrorManager {
       : _handler = MirrorHandlerHolder(handler),
         _metadata = metadata;
 
+  static GitMirrorManager withHandler<T>(
+      MirrorHandler<T> handler, Metadata metadata) {
+    return GitMirrorManager(DynamicMirrorHandler<T>(handler), metadata);
+  }
+
   Future<void> mirror(dynamic patch) => applyPatch(patch);
 
   Future<void> applyPatch(GitPatchInterface patch) async {
-    final revision = _metadata.get(metaHead) ?? initialRevision;
+    final head = _metadata.get(metaHead);
     final commits = patch
-        .format(revision)
+        .format(head)
         .transform(Utf8Decoder())
         .transform(LineSplitter())
         .transform(GitPatchParser(filter: patch.filter));
@@ -42,18 +48,22 @@ class GitMirrorManager implements MirrorManager {
     await _metadata.put(metaHead, commit.revision);
   }
 
-  Future<void> _applyDiff<T>(
-      Diff diff, Decode decode, DecodeKey decodeKey) async {
+  Future<void> _applyDiff(Diff diff, Decode decode, DecodeKey decodeKey) async {
     MapEntry decodeAddLine(String line) {
-      final object = decode(diff.path, line);
       final key = decodeKey(diff.path, line);
-      return MapEntry(key, object);
+      if (key != null) {
+        final object = decode(diff.path, line);
+        return MapEntry(key, object);
+      }
+      return null;
     }
 
     dynamic decodeRemoveLine(String line) => decodeKey(diff.path, line);
 
-    final putEntries = Map.fromEntries(diff.addLines.map(decodeAddLine));
-    final deleteOrPutKeys = Set.from(diff.removeLines.map(decodeRemoveLine));
+    final putEntries = Map.fromEntries(
+        diff.addLines.map(decodeAddLine).where((e) => e != null));
+    final deleteOrPutKeys = Set.from(
+        diff.removeLines.map(decodeRemoveLine).where((e) => e != null));
     final deleteKeys = deleteOrPutKeys.difference(Set.from(putEntries.keys));
 
     if (putEntries.isNotEmpty) {
@@ -66,5 +76,4 @@ class GitMirrorManager implements MirrorManager {
   }
 
   static const metaHead = 'head';
-  static const initialRevision = 'initial';
 }

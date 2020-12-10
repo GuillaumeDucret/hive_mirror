@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:hive/hive.dart';
-import 'package:hive_mirror/src/handlers.dart';
+import 'package:hive_mirror/src/handlers/box_mirror_handler.dart';
 
 import 'hive_mirror.dart';
 

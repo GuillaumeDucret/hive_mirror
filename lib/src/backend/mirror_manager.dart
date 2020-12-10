@@ -1,3 +1,5 @@
+import 'package:hive_mirror/src/handlers/handler_holder.dart';
+
 import '../hive_mirror.dart';
 import '../metadata.dart';
 import 'git/git_mirror_manager.dart';

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:hive/hive.dart';
 import 'package:isolate/isolate.dart';
 
+import 'handlers/dynamic_mirror_handler.dart';
 import 'hive_mirror.dart';
 import 'remote.dart';
 
@@ -31,7 +32,7 @@ class HiveMirrorImpl implements HiveMirrorInterface {
   }
 
   @override
-  Future<void> mirror(dynamic source, MirrorHandler handler) {
+  Future<void> mirror<T>(dynamic source, MirrorHandler<T> handler) {
     if (_runningHandlers[handler.id] == null) {
       _runningHandlers[handler.id] = _mirror(source, handler).whenComplete(() {
         _runningHandlers.remove(handler.id);
@@ -41,9 +42,10 @@ class HiveMirrorImpl implements HiveMirrorInterface {
     return _runningHandlers[handler.id];
   }
 
-  Future<void> _mirror(dynamic source, MirrorHandler handler) async {
+  Future<void> _mirror<T>(dynamic source, MirrorHandler<T> handler) async {
     final runner = await _useRunner();
-    await runner.run(Remote.mirror, MirrorMessage(source, handler));
+    await runner.run(
+        Remote.mirror, MirrorMessage(source, DynamicMirrorHandler<T>(handler)));
   }
 
   bool get _isRunning => _runner != null;

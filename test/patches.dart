@@ -10,25 +10,26 @@ abstract class TestPatchBase implements GitPatchInterface {
   final Decode _decode;
   final DecodeKey _decodeKey;
 
-  TestPatchBase(this._filePath, this._decode, this._decodeKey, [Filter filter])
-      : this._filter = filter ?? (() => true);
+  TestPatchBase._(this._filePath, this._decode, this._decodeKey,
+      [this._filter]);
 
   @override
-  Stream<List<int>> format(String revision) => File(_filePath).openRead();
+  Stream<List<int>> format([String _]) => File(_filePath).openRead();
 
   @override
-  bool filter(String fileName) => _filter(fileName);
+  bool filter(String filePath) => _filter?.call(filePath) ?? true;
 
   @override
-  dynamic decode(String fileName, String line) => _decode(fileName, line);
+  dynamic decode(String filePath, String line) => _decode(filePath, line);
 
   @override
-  dynamic decodeKey(String fileName, String line) => _decodeKey(fileName, line);
+  dynamic decodeKey(String filePath, String line) => _decodeKey(filePath, line);
 }
 
 class Add2Remove1Patch extends TestPatchBase {
-  Add2Remove1Patch.primitive() : super(filePath, _decodePrimitive, _decodeKey);
-  Add2Remove1Patch.testType() : super(filePath, _decodeTestType, _decodeKey);
+  Add2Remove1Patch.primitive()
+      : super._(filePath, _decodePrimitive, _decodeKey);
+  Add2Remove1Patch.testType() : super._(filePath, _decodeTestType, _decodeKey);
 
   static const filePath = 'test/assets/add2_remove1.patch';
   static const revision = '0000000000000000000000000000000000000000';
@@ -42,8 +43,8 @@ class Add2Remove1Patch extends TestPatchBase {
 }
 
 class Update1Patch extends TestPatchBase {
-  Update1Patch.primitive() : super(filePath, _decodePrimitive, _decodeKey);
-  Update1Patch.testType() : super(filePath, _decodeTestType, _decodeKey);
+  Update1Patch.primitive() : super._(filePath, _decodePrimitive, _decodeKey);
+  Update1Patch.testType() : super._(filePath, _decodeTestType, _decodeKey);
 
   static const filePath = 'test/assets/update1.patch';
   static const revision = '0000000000000000000000000000000000000000';
@@ -53,9 +54,9 @@ class Update1Patch extends TestPatchBase {
 
 class Diff2Patch extends TestPatchBase {
   Diff2Patch.primitive({Filter filter})
-      : super(filePath, _decodePrimitive, _decodeKey, filter);
+      : super._(filePath, _decodePrimitive, _decodeKey, filter);
   Diff2Patch.testType({Filter filter})
-      : super(filePath, _decodeTestType, _decodeKey, filter);
+      : super._(filePath, _decodeTestType, _decodeKey, filter);
 
   static const filePath = 'test/assets/diff2.patch';
   static const revision = '0000000000000000000000000000000000000000';
