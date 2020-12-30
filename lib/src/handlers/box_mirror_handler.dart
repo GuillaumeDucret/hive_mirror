@@ -24,5 +24,8 @@ class BoxMirrorHandler<T> implements MirrorHandler<T> {
   Future<void> deleteAll(Iterable keys) => _box.deleteAll(keys);
 
   @override
+  Future<void> clear() => _box.clear();
+
+  @override
   Future<void> dispose() => _box.close();
 }

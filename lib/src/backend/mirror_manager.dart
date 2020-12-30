@@ -1,19 +1,26 @@
-import 'package:hive_mirror/src/handlers/handler_holder.dart';
-
 import '../hive_mirror.dart';
 import '../metadata.dart';
+import 'file/file_descriptor.dart';
+import 'file/file_mirror_manager.dart';
 import 'git/git_mirror_manager.dart';
 import 'git/git_patch.dart';
 
 abstract class MirrorManager {
   Future<void> mirror(dynamic source);
 
-  factory MirrorManager.fromSource(dynamic source,
-      {MirrorHandler handler, Metadata metadata}) {
+  factory MirrorManager.fromSource(
+    dynamic source, {
+    MirrorHandler handler,
+    Metadata metadata,
+  }) {
     if (source is GitPatchInterface) {
       return GitMirrorManager(handler, metadata);
     }
-    throw UnsupportedError('''source $source is not supported.
-         Use one of the supported sources [GitPatch]''');
+    if (source is FileDescriptorInterface) {
+      return FileMirrorManager(handler, metadata);
+    }
+    throw ArgumentError('''source $source is not supported.
+         Use one of the supported sources
+         [GitPatchInterface, FileDescriptorInterface]''');
   }
 }

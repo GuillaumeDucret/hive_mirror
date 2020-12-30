@@ -11,5 +11,6 @@ abstract class MirrorHandler<T> {
   Future<void> init();
   Future<void> putAll(Map<dynamic, T> entries);
   Future<void> deleteAll(Iterable<dynamic> keys);
+  Future<void> clear();
   Future<void> dispose();
 }
