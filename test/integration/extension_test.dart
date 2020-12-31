@@ -12,9 +12,9 @@ import '../type.dart';
 
 void main() {
   group('Extension', () {
+    HiveMirror.init('.hive');
+    HiveMirror.registerAdapter(TestTypeAdapter());
     test('openMirrorBox()', () async {
-      HiveMirror.init('.hive');
-      HiveMirror.registerAdapter(TestTypeAdapter());
       await Hive.deleteBoxFromDisk('box');
 
       final source = Add2Remove1Patch.testType();
@@ -26,8 +26,6 @@ void main() {
     });
 
     test('openLazyMirrorBox()', () async {
-      HiveMirror.init('.hive');
-      HiveMirror.registerAdapter(TestTypeAdapter());
       await Hive.deleteBoxFromDisk('box');
 
       final source = Add2Remove1Patch.testType();

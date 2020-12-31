@@ -142,7 +142,7 @@ class _GitPatchParserSink implements EventSink<String> {
 class GitPatchParser extends StreamTransformerBase<String, Commit> {
   final Filter _filter;
 
-  GitPatchParser({filter}) : _filter = filter;
+  GitPatchParser({Filter filter}) : _filter = filter;
 
   Stream<Commit> bind(Stream<String> stream) => Stream<Commit>.eventTransformed(
       stream,

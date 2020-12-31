@@ -15,7 +15,7 @@ void main() {
       await Hive.deleteBoxFromDisk('box');
 
       final source = Add2Remove1Patch.primitive();
-      await HiveMirror.mirror(source, BoxMirrorHandler('box'));
+      await HiveMirror.mirror(source, BoxMirrorHandler<String>('box'));
 
       final box = await Hive.openBox<String>('box');
       expect(box.get('key1'), equals('value1'));

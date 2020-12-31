@@ -14,7 +14,7 @@ const metaHead = GitMirrorManager.metaHead;
 void main() {
   group('GitMirrorManager applyPatch()', () {
     test('with addition and removal', () async {
-      final handler = MirrorHandlerMock();
+      final handler = MirrorHandlerMock<String>();
       final metadata = MetadataMock();
       final manager = GitMirrorManager.withHandler(handler, metadata);
 
@@ -26,7 +26,7 @@ void main() {
       verify(metadata.put(metaHead, Add2Remove1Patch.revision));
     });
     test('with update', () async {
-      final handler = MirrorHandlerMock();
+      final handler = MirrorHandlerMock<String>();
       final metadata = MetadataMock();
       final manager = GitMirrorManager.withHandler(handler, metadata);
 
@@ -38,7 +38,7 @@ void main() {
       verify(metadata.put(metaHead, Add2Remove1Patch.revision));
     });
     test('with several diffs', () async {
-      final handler = MirrorHandlerMock();
+      final handler = MirrorHandlerMock<String>();
       final metadata = MetadataMock();
       final manager = GitMirrorManager.withHandler(handler, metadata);
 
@@ -51,7 +51,7 @@ void main() {
     });
 
     test('with skipped diff', () async {
-      final handler = MirrorHandlerMock();
+      final handler = MirrorHandlerMock<String>();
       final metadata = MetadataMock();
       final manager = GitMirrorManager.withHandler(handler, metadata);
 

@@ -16,8 +16,10 @@ void main() {
 
       final source = Add2Remove1Patch.primitive();
 
-      final future1 = HiveMirror.mirror(source, BoxMirrorHandler('box'));
-      final future2 = HiveMirror.mirror(source, BoxMirrorHandler('box'));
+      final future1 =
+          HiveMirror.mirror(source, BoxMirrorHandler<String>('box'));
+      final future2 =
+          HiveMirror.mirror(source, BoxMirrorHandler<String>('box'));
 
       expect(future1, equals(future2));
       await Future.wait([future1, future2]);
@@ -30,8 +32,10 @@ void main() {
 
       final source = Add2Remove1Patch.primitive();
 
-      final future1 = HiveMirror.mirror(source, BoxMirrorHandler('box1'));
-      final future2 = HiveMirror.mirror(source, BoxMirrorHandler('box2'));
+      final future1 =
+          HiveMirror.mirror(source, BoxMirrorHandler<String>('box1'));
+      final future2 =
+          HiveMirror.mirror(source, BoxMirrorHandler<String>('box2'));
 
       expect(future1, isNot(equals(future2)));
       await Future.wait([future1, future2]);

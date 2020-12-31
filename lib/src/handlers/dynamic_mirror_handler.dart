@@ -4,7 +4,7 @@
 
 import '../hive_mirror.dart';
 
-class DynamicMirrorHandler<T> implements MirrorHandler {
+class DynamicMirrorHandler<T> implements MirrorHandler<dynamic> {
   final MirrorHandler<T> _delegate;
 
   DynamicMirrorHandler(MirrorHandler<T> handler) : _delegate = handler;

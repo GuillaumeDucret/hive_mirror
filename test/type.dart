@@ -17,11 +17,11 @@ class TestTypeAdapter implements TypeAdapter<TestType> {
 
   @override
   TestType read(BinaryReader reader) {
-    return TestType(reader.read(), reader.read());
+    return TestType(reader.readString(), reader.readString());
   }
 
   @override
   void write(BinaryWriter writer, TestType obj) {
-    writer..write(obj.id)..write(obj.value);
+    writer..writeString(obj.id)..writeString(obj.value);
   }
 }

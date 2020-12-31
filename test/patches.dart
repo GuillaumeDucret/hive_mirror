@@ -53,7 +53,7 @@ class Update1Patch extends TestPatchBase {
   static const filePath = 'test/assets/update1.patch';
   static const revision = '0000000000000000000000000000000000000000';
   static const addMap = {'key1': 'value2'};
-  static const removeKeys = [];
+  static const removeKeys = <dynamic>[];
 }
 
 class Diff2Patch extends TestPatchBase {
@@ -68,7 +68,7 @@ class Diff2Patch extends TestPatchBase {
   static const fileName2 = '/file2';
   static const addMap1 = {'key1': 'value1', 'key2': 'value2'};
   static const addMap2 = {'key3': 'value3', 'key4': 'value4'};
-  static const removeKeys = [];
+  static const removeKeys = <dynamic>[];
 }
 
 String _decodePrimitive(String filePath, String line) {
