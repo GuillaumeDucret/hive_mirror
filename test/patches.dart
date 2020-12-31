@@ -1,3 +1,7 @@
+// Copyright 2020 Guillaume Ducret. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 import 'dart:io';
 
 import 'package:hive_mirror/src/backend/git/git_patch.dart';

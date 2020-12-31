@@ -1,7 +1,7 @@
 name: hive_mirror
 description: A new Dart package project.
 version: 0.0.1
-author:
+author: Guillaume Ducret
 homepage:
 
 environment:
