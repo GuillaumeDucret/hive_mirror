@@ -25,5 +25,8 @@ class DynamicMirrorHandler<T> implements MirrorHandler<dynamic> {
   Future<void> deleteAll(Iterable keys) => _delegate.deleteAll(keys);
 
   @override
+  Future<void> clear() => _delegate.clear();
+
+  @override
   Future<void> dispose() => _delegate.dispose();
 }
