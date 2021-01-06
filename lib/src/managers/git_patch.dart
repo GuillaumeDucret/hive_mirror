@@ -4,13 +4,13 @@
 
 import 'dart:convert';
 
-import '../../handlers/dynamic_mirror_handler.dart';
-import '../../handlers/handler_holder.dart';
-import '../../hive_mirror.dart';
-import '../../metadata.dart';
-import '../mirror_manager.dart';
-import 'git_patch.dart';
-import 'git_patch_parser.dart';
+import '../convert/git_patch_parser.dart';
+import '../datasource/git_patch.dart';
+import '../handlers/dynamic.dart';
+import '../handlers/handler_holder.dart';
+import '../hive_mirror.dart';
+import '../metadata.dart';
+import 'mirror_manager.dart';
 
 class GitMirrorManager implements MirrorManager {
   final MirrorHandlerHolder _handler;
@@ -28,7 +28,7 @@ class GitMirrorManager implements MirrorManager {
   Future<void> mirror(dynamic patch) => applyPatch(patch as GitPatchInterface);
 
   Future<void> applyPatch(GitPatchInterface patch) async {
-    final head = _metadata.get(metaHead);
+    final head = _metadata.get(headMeta);
     final commits = patch
         .format(head)
         .transform(Utf8Decoder())
@@ -45,14 +45,15 @@ class GitMirrorManager implements MirrorManager {
   }
 
   Future<void> _applyCommit(
-      Commit commit, Decode decode, DecodeKey decodeKey) async {
+      Commit commit, PatchDecode decode, PatchDecodeKey decodeKey) async {
     for (Diff diff in commit.diffs) {
       await _applyDiff(diff, decode, decodeKey);
     }
-    await _metadata.put(metaHead, commit.revision);
+    await _metadata.put(headMeta, commit.revision);
   }
 
-  Future<void> _applyDiff(Diff diff, Decode decode, DecodeKey decodeKey) async {
+  Future<void> _applyDiff(
+      Diff diff, PatchDecode decode, PatchDecodeKey decodeKey) async {
     MapEntry<dynamic, dynamic> decodeAddLine(String line) {
       final dynamic key = decodeKey(diff.path, line);
 
@@ -81,5 +82,5 @@ class GitMirrorManager implements MirrorManager {
     }
   }
 
-  static const metaHead = 'head';
+  static const headMeta = 'git_head';
 }

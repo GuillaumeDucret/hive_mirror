@@ -4,15 +4,15 @@
 
 import 'dart:io';
 
-import 'package:hive_mirror/src/backend/git/git_patch.dart';
+import 'package:hive_mirror/src/datasource/git_patch.dart';
 
 import 'type.dart';
 
 abstract class TestPatchBase implements GitPatchInterface {
   final String _filePath;
   final Filter _filter;
-  final Decode _decode;
-  final DecodeKey _decodeKey;
+  final PatchDecode _decode;
+  final PatchDecodeKey _decodeKey;
 
   TestPatchBase._(this._filePath, this._decode, this._decodeKey,
       [this._filter]);

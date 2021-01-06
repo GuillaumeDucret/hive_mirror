@@ -18,12 +18,12 @@ class Metadata {
   String _dbKey(String key) => '$_handlerId:$key';
 
   static Future<Metadata> open(MirrorHandler handler) async {
-    final db = await Hive.openBox<String>('.hive_mirror_metadata');
+    final db = await Hive.openBox<String>('.hive_mirror');
     return Metadata._(handler.id, db);
   }
 
   static Future<void> close() async {
-    final db = Hive.box<String>('.hive_mirror_metadata');
+    final db = Hive.box<String>('.hive_mirror');
     await db?.close();
   }
 }

@@ -16,18 +16,24 @@ abstract class FileDescriptorInterface {
 class FileDescriptor implements FileDescriptorInterface {
   final File _file;
   final Uri _uri;
-  final Decode _decode;
-  final DecodeKey _decodeKey;
+  final FileDecode _decode;
+  final FileDecodeKey _decodeKey;
   String _eTag;
 
-  FileDescriptor.file(File file, {Decode decode, DecodeKey decodeKey})
-      : _file = file,
+  FileDescriptor.file(
+    File file, {
+    FileDecode decode,
+    FileDecodeKey decodeKey,
+  })  : _file = file,
         _uri = null,
         _decode = decode,
         _decodeKey = decodeKey;
 
-  FileDescriptor.uri(Uri uri, {Decode decode, DecodeKey decodeKey})
-      : _file = null,
+  FileDescriptor.uri(
+    Uri uri, {
+    FileDecode decode,
+    FileDecodeKey decodeKey,
+  })  : _file = null,
         _uri = uri,
         _decode = decode,
         _decodeKey = decodeKey;
@@ -63,5 +69,5 @@ class FileDescriptor implements FileDescriptorInterface {
   dynamic decodeKey(String line) => _decodeKey(line);
 }
 
-typedef dynamic Decode(String line);
-typedef dynamic DecodeKey(String line);
+typedef dynamic FileDecode(String line);
+typedef dynamic FileDecodeKey(String line);

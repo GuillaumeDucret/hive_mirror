@@ -4,7 +4,7 @@
 
 import 'dart:async';
 
-import 'git_patch.dart';
+import '../datasource/git_patch.dart';
 
 class Commit {
   final String revision;

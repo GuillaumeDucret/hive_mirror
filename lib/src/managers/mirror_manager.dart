@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+import '../datasource/file.dart';
+import '../datasource/git_patch.dart';
 import '../hive_mirror.dart';
 import '../metadata.dart';
-import 'file/file_descriptor.dart';
-import 'file/file_mirror_manager.dart';
-import 'git/git_mirror_manager.dart';
-import 'git/git_patch.dart';
+import 'file.dart';
+import 'git_patch.dart';
 
 abstract class MirrorManager {
   Future<void> mirror(dynamic source);

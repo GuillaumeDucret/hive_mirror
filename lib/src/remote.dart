@@ -4,7 +4,7 @@
 
 import 'package:hive/hive.dart';
 
-import 'backend/mirror_manager.dart';
+import 'managers/mirror_manager.dart';
 import 'hive_mirror.dart';
 import 'metadata.dart';
 

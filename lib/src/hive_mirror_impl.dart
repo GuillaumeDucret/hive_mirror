@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:hive/hive.dart';
 import 'package:isolate/isolate.dart';
 
-import 'handlers/dynamic_mirror_handler.dart';
+import 'handlers/dynamic.dart';
 import 'hive_mirror.dart';
 import 'remote.dart';
 

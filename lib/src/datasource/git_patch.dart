@@ -18,35 +18,43 @@ class GitPatch implements GitPatchInterface {
   final String _uriTemplate;
   final String _initialBaseRevision;
   final Filter _filter;
-  final Decode _decode;
-  final DecodeKey _decodeKey;
+  final PatchDecode _decode;
+  final PatchDecodeKey _decodeKey;
 
-  GitPatch.file(File file, {Filter filter, Decode decode, DecodeKey decodeKey})
-      : _file = file,
+  GitPatch.file(
+    File file, {
+    Filter filter,
+    PatchDecode decode,
+    PatchDecodeKey decodeKey,
+  })  : _file = file,
         _uriTemplate = null,
         _initialBaseRevision = null,
         _filter = filter,
         _decode = decode,
         _decodeKey = decodeKey;
 
-  GitPatch.uri(String uriTemplate,
-      {String initialBaseRevision = 'initial',
-      Filter filter,
-      Decode decode,
-      DecodeKey decodeKey})
-      : _file = null,
+  GitPatch.uri(
+    String uriTemplate, {
+    String initialBaseRevision = 'initial',
+    Filter filter,
+    PatchDecode decode,
+    PatchDecodeKey decodeKey,
+  })  : _file = null,
         _uriTemplate = uriTemplate,
         _initialBaseRevision = initialBaseRevision,
         _filter = filter,
         _decode = decode,
         _decodeKey = decodeKey;
 
-  factory GitPatch.githubCompareView(String userName, String repoName,
-      {String initialBaseRevision = 'initial',
-      String compareRevision = 'master',
-      Filter filter,
-      Decode decode,
-      DecodeKey decodeKey}) {
+  factory GitPatch.githubCompareView(
+    String userName,
+    String repoName, {
+    String initialBaseRevision = 'initial',
+    String compareRevision = 'master',
+    Filter filter,
+    PatchDecode decode,
+    PatchDecodeKey decodeKey,
+  }) {
     final _uriTemplate =
         'https://github.com/$userName/$repoName/compare/\$baseRevision..$compareRevision.patch';
     return GitPatch.uri(_uriTemplate,
@@ -87,5 +95,5 @@ class GitPatch implements GitPatchInterface {
 }
 
 typedef bool Filter(String filePath);
-typedef dynamic Decode(String filePath, String line);
-typedef dynamic DecodeKey(String filePath, String line);
+typedef dynamic PatchDecode(String filePath, String line);
+typedef dynamic PatchDecodeKey(String filePath, String line);

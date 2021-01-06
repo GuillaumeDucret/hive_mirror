@@ -5,9 +5,9 @@
 import 'dart:typed_data';
 
 import 'package:hive/hive.dart';
-import 'package:hive_mirror/src/handlers/box_mirror_handler.dart';
 
-import 'hive_mirror.dart';
+import '../hive_mirror.dart';
+import 'handlers/box.dart';
 
 extension Mirror on HiveInterface {
   Future<Box<E>> openMirrorBox<E>(

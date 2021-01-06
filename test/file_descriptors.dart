@@ -4,7 +4,7 @@
 
 import 'dart:io';
 
-import 'package:hive_mirror/src/backend/file/file_descriptor.dart';
+import 'package:hive_mirror/src/datasource/file.dart';
 
 import 'type.dart';
 
@@ -13,8 +13,8 @@ abstract class TestFileDescriptorBase implements FileDescriptorInterface {
   final etag;
 
   final String _filePath;
-  final Decode _decode;
-  final DecodeKey _decodeKey;
+  final FileDecode _decode;
+  final FileDecodeKey _decodeKey;
 
   TestFileDescriptorBase._(
       this.etag, this._filePath, this._decode, this._decodeKey);

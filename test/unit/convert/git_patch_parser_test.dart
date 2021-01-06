@@ -5,10 +5,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hive_mirror/src/backend/git/git_patch_parser.dart';
+import 'package:hive_mirror/src/convert/git_patch_parser.dart';
 import 'package:test/test.dart';
 
-import '../../../patches.dart';
+import '../../patches.dart';
 
 void main() {
   group('GitPatchParser', () {

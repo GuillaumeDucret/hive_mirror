@@ -4,7 +4,6 @@
 
 import 'package:hive/hive.dart';
 import 'package:hive_mirror/hive_mirror.dart';
-import 'package:hive_mirror/extension.dart';
 import 'package:test/test.dart';
 
 import '../patches.dart';

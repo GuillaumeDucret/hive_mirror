@@ -1,8 +1,8 @@
 name: hive_mirror
-description: A new Dart package project.
+description: One way sync for hive databases.
 version: 0.0.1
 author: Guillaume Ducret
-homepage:
+homepage: https://github.com/GuillaumeDucret/hive_mirror
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
