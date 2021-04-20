@@ -7,49 +7,51 @@ import 'dart:io';
 import 'package:async/async.dart';
 
 abstract class FileDescriptorInterface {
-  Stream<List<int>> open(String eTag);
+  Stream<List<int>> open(String? eTag);
   String get etag;
   dynamic decode(String line);
   dynamic decodeKey(String line);
 }
 
 class FileDescriptor implements FileDescriptorInterface {
-  final File _file;
-  final Uri _uri;
+  final File? _file;
+  final Uri? _uri;
   final FileDecode _decode;
   final FileDecodeKey _decodeKey;
-  String _eTag;
+  String? _eTag;
 
   FileDescriptor.file(
     File file, {
-    FileDecode decode,
-    FileDecodeKey decodeKey,
-  })  : _file = file,
+    required FileDecode decode,
+    required FileDecodeKey decodeKey,
+  })   : _file = file,
         _uri = null,
         _decode = decode,
         _decodeKey = decodeKey;
 
   FileDescriptor.uri(
     Uri uri, {
-    FileDecode decode,
-    FileDecodeKey decodeKey,
-  })  : _file = null,
+    required FileDecode decode,
+    required FileDecodeKey decodeKey,
+  })   : _file = null,
         _uri = uri,
         _decode = decode,
         _decodeKey = decodeKey;
 
-  Stream<List<int>> open(String eTag) {
+  Stream<List<int>> open(String? eTag) {
     if (_file != null) {
       return LazyStream(() async {
-        _eTag = (await _file.lastModified()).millisecondsSinceEpoch.toString();
-        return _file.openRead();
+        _eTag = (await _file!.lastModified()).millisecondsSinceEpoch.toString();
+        return _file!.openRead();
       });
     }
 
     if (_uri != null) {
       return LazyStream(() async {
-        final request = await HttpClient().getUrl(_uri);
-        request.headers.set(HttpHeaders.ifNoneMatchHeader, eTag);
+        final request = await HttpClient().getUrl(_uri!);
+        if (eTag != null) {
+          request.headers.set(HttpHeaders.ifNoneMatchHeader, eTag);
+        }
 
         final response = await request.close();
         _eTag = response.headers.value(HttpHeaders.etagHeader);
@@ -61,7 +63,7 @@ class FileDescriptor implements FileDescriptorInterface {
   }
 
   String get etag {
-    if (_eTag != null) return _eTag;
+    if (_eTag != null) return _eTag!;
     throw StateError('etag must be called after open()');
   }
 

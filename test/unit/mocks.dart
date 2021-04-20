@@ -4,8 +4,11 @@
 
 import 'package:hive_mirror/src/hive_mirror.dart';
 import 'package:hive_mirror/src/metadata.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
 
-class MetadataMock extends Mock implements Metadata {}
+//class MetadataMock extends Mock implements Metadata {}
 
-class MirrorHandlerMock<T> extends Mock implements MirrorHandler<T> {}
+//class MirrorHandlerMock<T> extends Mock implements MirrorHandler<T> {}
+
+@GenerateMocks([MirrorHandler, Metadata])
+class Mocks {}

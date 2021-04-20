@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import 'dart:convert';
+import 'package:collection/collection.dart';
 
 import '../datasource/file.dart';
 import '../handlers/dynamic.dart';
@@ -45,7 +46,7 @@ class FileMirrorManager implements MirrorManager {
 
   Future<void> _applyLines(String etag, Iterable<String> lines,
       FileDecode decode, FileDecodeKey decodeKey) async {
-    MapEntry<dynamic, dynamic> decodeLine(String line) {
+    MapEntry<dynamic, dynamic>? decodeLine(String line) {
       final dynamic key = decodeKey(line);
       if (key != null) {
         final dynamic object = decode(line);
@@ -54,8 +55,8 @@ class FileMirrorManager implements MirrorManager {
       return null;
     }
 
-    final putEntries = Map<dynamic, dynamic>.fromEntries(
-        lines.map(decodeLine).where((e) => e != null));
+    final putEntries =
+        Map<dynamic, dynamic>.fromEntries(lines.map(decodeLine).whereNotNull());
 
     await (await _handler.use()).clear();
 

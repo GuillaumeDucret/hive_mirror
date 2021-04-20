@@ -7,16 +7,18 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../patches.dart';
-import '../mocks.dart';
+import '../mocks.mocks.dart';
 
 const headMeta = GitMirrorManager.headMeta;
 
 void main() {
   group('GitMirrorManager applyPatch()', () {
     test('with addition and removal', () async {
-      final handler = MirrorHandlerMock<String>();
-      final metadata = MetadataMock();
+      final handler = MockMirrorHandler<String>();
+      final metadata = MockMetadata();
       final manager = GitMirrorManager.withHandler(handler, metadata);
+
+      when(metadata.get(headMeta)).thenReturn(null);
 
       await manager.applyPatch(Add2Remove1Patch.primitive());
 
@@ -26,9 +28,11 @@ void main() {
       verify(metadata.put(headMeta, Add2Remove1Patch.revision));
     });
     test('with update', () async {
-      final handler = MirrorHandlerMock<String>();
-      final metadata = MetadataMock();
+      final handler = MockMirrorHandler<String>();
+      final metadata = MockMetadata();
       final manager = GitMirrorManager.withHandler(handler, metadata);
+
+      when(metadata.get(headMeta)).thenReturn(null);
 
       await manager.applyPatch(Update1Patch.primitive());
 
@@ -38,9 +42,11 @@ void main() {
       verify(metadata.put(headMeta, Add2Remove1Patch.revision));
     });
     test('with several diffs', () async {
-      final handler = MirrorHandlerMock<String>();
-      final metadata = MetadataMock();
+      final handler = MockMirrorHandler<String>();
+      final metadata = MockMetadata();
       final manager = GitMirrorManager.withHandler(handler, metadata);
+
+      when(metadata.get(headMeta)).thenReturn(null);
 
       await manager.applyPatch(Diff2Patch.primitive());
 
@@ -51,9 +57,11 @@ void main() {
     });
 
     test('with skipped diff', () async {
-      final handler = MirrorHandlerMock<String>();
-      final metadata = MetadataMock();
+      final handler = MockMirrorHandler<String>();
+      final metadata = MockMetadata();
       final manager = GitMirrorManager.withHandler(handler, metadata);
+
+      when(metadata.get(headMeta)).thenReturn(null);
 
       await manager.applyPatch(
           Diff2Patch.primitive(filter: (fn) => fn != Diff2Patch.fileName2));

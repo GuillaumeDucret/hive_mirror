@@ -10,7 +10,7 @@ import 'type.dart';
 
 abstract class TestPatchBase implements GitPatchInterface {
   final String _filePath;
-  final Filter _filter;
+  final Filter? _filter;
   final PatchDecode _decode;
   final PatchDecodeKey _decodeKey;
 
@@ -18,7 +18,7 @@ abstract class TestPatchBase implements GitPatchInterface {
       [this._filter]);
 
   @override
-  Stream<List<int>> format([String _]) => File(_filePath).openRead();
+  Stream<List<int>> format([String? _]) => File(_filePath).openRead();
 
   @override
   bool filter(String filePath) => _filter?.call(filePath) ?? true;
@@ -57,10 +57,13 @@ class Update1Patch extends TestPatchBase {
 }
 
 class Diff2Patch extends TestPatchBase {
-  Diff2Patch.primitive({Filter filter})
-      : super._(filePath, _decodePrimitive, _decodeKey, filter);
-  Diff2Patch.testType({Filter filter})
-      : super._(filePath, _decodeTestType, _decodeKey, filter);
+  Diff2Patch.primitive({
+    Filter? filter,
+  }) : super._(filePath, _decodePrimitive, _decodeKey, filter);
+
+  Diff2Patch.testType({
+    Filter? filter,
+  }) : super._(filePath, _decodeTestType, _decodeKey, filter);
 
   static const filePath = 'test/assets/diff2.patch';
   static const revision = '0000000000000000000000000000000000000000';

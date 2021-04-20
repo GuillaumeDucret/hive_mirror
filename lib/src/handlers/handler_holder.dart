@@ -6,7 +6,7 @@ import '../hive_mirror.dart';
 
 class MirrorHandlerHolder {
   final MirrorHandler _held;
-  Future<MirrorHandler> _handler;
+  Future<MirrorHandler>? _handler;
 
   MirrorHandlerHolder(MirrorHandler handler) : _held = handler;
 
@@ -15,7 +15,7 @@ class MirrorHandlerHolder {
   Future<void> dispose() async {
     if (_handler != null) {
       try {
-        return _handler.then((handler) => handler.dispose());
+        return _handler!.then((handler) => handler.dispose());
       } finally {
         _handler = null;
       }

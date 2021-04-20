@@ -9,15 +9,10 @@ import 'hive_mirror.dart';
 import 'metadata.dart';
 
 abstract class Remote {
-  static void init(InitMessage message) {
-    Hive.init(message.homePath);
-  }
-
-  static void registerAdapter(RegisterAdapterMessage message) {
-    message.adapters.forEach(Hive.registerAdapter);
-  }
-
   static Future<void> mirror(MirrorMessage message) async {
+    Hive.init(message.homePath);
+    message.adapters.forEach((a) => a.register());
+
     final metadata = await Metadata.open(message.handler);
     final manager = MirrorManager.fromSource(message.source,
         handler: message.handler, metadata: metadata);
@@ -26,21 +21,24 @@ abstract class Remote {
   }
 }
 
-class InitMessage {
-  final String homePath;
-
-  InitMessage(this.homePath);
-}
-
-class RegisterAdapterMessage {
-  final Set<TypeAdapter> adapters;
-
-  RegisterAdapterMessage(this.adapters);
-}
-
 class MirrorMessage {
+  const MirrorMessage(
+    this.source,
+    this.handler, {
+    required this.homePath,
+    required this.adapters,
+  });
+
   final dynamic source;
   final MirrorHandler handler;
+  final String homePath;
+  final Set<RemoteTypeAdapter> adapters;
+}
 
-  MirrorMessage(this.source, this.handler);
+class RemoteTypeAdapter<T> {
+  const RemoteTypeAdapter(this.delegate);
+
+  final TypeAdapter<T> delegate;
+
+  void register() => Hive.registerAdapter(delegate);
 }

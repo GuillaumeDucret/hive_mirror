@@ -8,10 +8,13 @@ import '../hive_mirror.dart';
 
 class BoxMirrorHandler<T> implements MirrorHandler<T> {
   final String name;
-  final String path;
-  LazyBox<T> _box;
+  final String? path;
+  late LazyBox<T> _box;
 
-  BoxMirrorHandler(this.name, {this.path});
+  BoxMirrorHandler(
+    this.name, {
+    this.path,
+  });
 
   @override
   String get id => name;

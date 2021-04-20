@@ -12,7 +12,7 @@ class Metadata {
 
   Metadata._(this._handlerId, this._db);
 
-  String get(String key) => _db.get(_dbKey(key));
+  String? get(String key) => _db.get(_dbKey(key));
   Future<void> put(String key, String value) => _db.put(_dbKey(key), value);
 
   String _dbKey(String key) => '$_handlerId:$key';
@@ -24,6 +24,6 @@ class Metadata {
 
   static Future<void> close() async {
     final db = Hive.box<String>('.hive_mirror');
-    await db?.close();
+    await db.close();
   }
 }

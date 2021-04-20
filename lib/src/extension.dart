@@ -12,13 +12,12 @@ import 'handlers/box.dart';
 extension Mirror on HiveInterface {
   Future<Box<E>> openMirrorBox<E>(
     String name, {
-    HiveCipher encryptionCipher,
-    KeyComparator keyComparator,
-    CompactionStrategy compactionStrategy,
+    HiveCipher? encryptionCipher,
+    KeyComparator? keyComparator,
+    CompactionStrategy? compactionStrategy,
     bool crashRecovery = true,
-    String path,
-    Uint8List bytes,
-    @deprecated List<int> encryptionKey,
+    String? path,
+    Uint8List? bytes,
     dynamic mirrorSource,
   }) async {
     final handler = BoxMirrorHandler<E>(name, path: path);
@@ -33,7 +32,6 @@ extension Mirror on HiveInterface {
         crashRecovery: crashRecovery,
         path: path,
         bytes: bytes,
-        encryptionKey: encryptionKey,
       );
     }
 
@@ -45,7 +43,6 @@ extension Mirror on HiveInterface {
         crashRecovery: crashRecovery,
         path: path,
         bytes: bytes,
-        encryptionKey: encryptionKey,
       );
     }
 
@@ -57,7 +54,6 @@ extension Mirror on HiveInterface {
         crashRecovery: crashRecovery,
         path: path,
         bytes: bytes,
-        encryptionKey: encryptionKey,
       );
     }
 
@@ -67,18 +63,16 @@ extension Mirror on HiveInterface {
       crashRecovery: crashRecovery,
       path: path,
       bytes: bytes,
-      encryptionKey: encryptionKey,
     );
   }
 
   Future<LazyBox<E>> openLazyMirrorBox<E>(
     String name, {
-    HiveCipher encryptionCipher,
-    KeyComparator keyComparator,
-    CompactionStrategy compactionStrategy,
-    bool crashRecovery,
-    String path,
-    List<int> encryptionKey,
+    HiveCipher? encryptionCipher,
+    KeyComparator? keyComparator,
+    CompactionStrategy? compactionStrategy,
+    bool crashRecovery = true,
+    String? path,
     dynamic mirrorSource,
   }) async {
     final handler = BoxMirrorHandler<E>(name, path: path);
@@ -92,7 +86,6 @@ extension Mirror on HiveInterface {
         compactionStrategy: compactionStrategy,
         crashRecovery: crashRecovery,
         path: path,
-        encryptionKey: encryptionKey,
       );
     }
 
@@ -103,7 +96,6 @@ extension Mirror on HiveInterface {
         keyComparator: keyComparator,
         crashRecovery: crashRecovery,
         path: path,
-        encryptionKey: encryptionKey,
       );
     }
 
@@ -114,7 +106,6 @@ extension Mirror on HiveInterface {
         compactionStrategy: compactionStrategy,
         crashRecovery: crashRecovery,
         path: path,
-        encryptionKey: encryptionKey,
       );
     }
 
@@ -123,7 +114,6 @@ extension Mirror on HiveInterface {
       encryptionCipher: encryptionCipher,
       crashRecovery: crashRecovery,
       path: path,
-      encryptionKey: encryptionKey,
     );
   }
 }

@@ -20,8 +20,8 @@ void main() {
       final box =
           await Hive.openMirrorBox<TestType>('box', mirrorSource: source);
 
-      expect(box.get('key1').value, equals('value1'));
-      expect(box.get('key2').value, equals('value2'));
+      expect(box.get('key1')?.value, equals('value1'));
+      expect(box.get('key2')?.value, equals('value2'));
     });
 
     test('openLazyMirrorBox()', () async {
@@ -31,8 +31,8 @@ void main() {
       final box =
           await Hive.openLazyMirrorBox<TestType>('box', mirrorSource: source);
 
-      expect((await box.get('key1')).value, equals('value1'));
-      expect((await box.get('key2')).value, equals('value2'));
+      expect((await box.get('key1'))?.value, equals('value1'));
+      expect((await box.get('key2'))?.value, equals('value2'));
     });
   });
 }

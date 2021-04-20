@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 import 'dart:convert';
+import 'package:collection/collection.dart';
 
 import '../convert/git_patch_parser.dart';
 import '../datasource/git_patch.dart';
@@ -54,7 +55,7 @@ class GitMirrorManager implements MirrorManager {
 
   Future<void> _applyDiff(
       Diff diff, PatchDecode decode, PatchDecodeKey decodeKey) async {
-    MapEntry<dynamic, dynamic> decodeAddLine(String line) {
+    MapEntry<dynamic, dynamic>? decodeAddLine(String line) {
       final dynamic key = decodeKey(diff.path, line);
 
       if (key != null) {
@@ -67,10 +68,9 @@ class GitMirrorManager implements MirrorManager {
     dynamic decodeRemoveLine(String line) => decodeKey(diff.path, line);
 
     final putEntries = Map<dynamic, dynamic>.fromEntries(
-        diff.addLines.map(decodeAddLine).where((e) => e != null));
-    final deleteOrPutKeys = Set<dynamic>.from(diff.removeLines
-        .map<dynamic>(decodeRemoveLine)
-        .where((dynamic e) => e != null));
+        diff.addLines.map(decodeAddLine).whereNotNull());
+    final deleteOrPutKeys = Set<dynamic>.from(
+        diff.removeLines.map<dynamic>(decodeRemoveLine).whereNotNull());
     final deleteKeys = deleteOrPutKeys.difference(Set.from(putEntries.keys));
 
     if (putEntries.isNotEmpty) {

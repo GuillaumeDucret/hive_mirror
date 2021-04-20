@@ -7,16 +7,18 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../file_descriptors.dart';
-import '../mocks.dart';
+import '../mocks.mocks.dart';
 
 const etagMeta = FileMirrorManager.etagMeta;
 
 void main() {
   group('FileMirrorManager load()', () {
     test('file with new etag', () async {
-      final handler = MirrorHandlerMock<String>();
-      final metadata = MetadataMock();
+      final handler = MockMirrorHandler<String>();
+      final metadata = MockMetadata();
       final manager = FileMirrorManager.withHandler(handler, metadata);
+
+      when(metadata.get(etagMeta)).thenReturn(null);
 
       await manager.loadFile(Load2FileDescriptor.primitive());
 
@@ -27,8 +29,8 @@ void main() {
     });
 
     test('file with previous etag', () async {
-      final handler = MirrorHandlerMock<String>();
-      final metadata = MetadataMock();
+      final handler = MockMirrorHandler<String>();
+      final metadata = MockMetadata();
       final manager = FileMirrorManager.withHandler(handler, metadata);
 
       when(metadata.get(etagMeta)).thenReturn(Load2FileDescriptor.etagValue);

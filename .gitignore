@@ -25,3 +25,6 @@
 .pub-cache/
 .pub/
 /build/
+
+# Flutter/Dart generated files
+*.mocks.dart

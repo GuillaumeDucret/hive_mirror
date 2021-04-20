@@ -14,8 +14,8 @@ abstract class MirrorManager {
 
   factory MirrorManager.fromSource(
     dynamic source, {
-    MirrorHandler handler,
-    Metadata metadata,
+    required MirrorHandler handler,
+    required Metadata metadata,
   }) {
     if (source is GitPatchInterface) {
       return GitMirrorManager(handler, metadata);

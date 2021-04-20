@@ -20,7 +20,7 @@ abstract class TestFileDescriptorBase implements FileDescriptorInterface {
       this.etag, this._filePath, this._decode, this._decodeKey);
 
   @override
-  Stream<List<int>> open(String _) => File(_filePath).openRead();
+  Stream<List<int>> open(String? _) => File(_filePath).openRead();
 
   @override
   dynamic decode(String line) => _decode(line);

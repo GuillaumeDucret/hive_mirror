@@ -28,14 +28,16 @@ class Chunk {
 
 class _GitPatchParserSink implements EventSink<String> {
   final EventSink<Commit> _sink;
-  final Filter _filter;
+  final Filter? _filter;
 
-  Commit _commit;
-  Diff _diff;
-  Chunk _chunk;
+  Commit? _commit;
+  Diff? _diff;
+  Chunk? _chunk;
 
-  _GitPatchParserSink(EventSink<Commit> sink, {Filter filter})
-      : _sink = sink,
+  _GitPatchParserSink(
+    EventSink<Commit> sink, {
+    Filter? filter,
+  })  : _sink = sink,
         _filter = filter;
 
   @override
@@ -77,14 +79,14 @@ class _GitPatchParserSink implements EventSink<String> {
     final match = _commitRegExp.firstMatch(line);
 
     if (match != null) {
-      final revision = match.group(1);
+      final revision = match.group(1)!;
       _commit = Commit(revision);
     }
   }
 
   void _exitCommit() {
     if (_commit != null) {
-      _sink.add(_commit);
+      _sink.add(_commit!);
       _commit = null;
     }
   }
@@ -94,7 +96,7 @@ class _GitPatchParserSink implements EventSink<String> {
       final match = _diffRegExp.firstMatch(line);
 
       if (match != null) {
-        final path = match.group(1);
+        final path = match.group(1)!;
         if (_filter?.call(path) ?? true) {
           _diff = Diff(path);
         }
@@ -104,7 +106,7 @@ class _GitPatchParserSink implements EventSink<String> {
 
   void _exitDiff() {
     if (_diff != null) {
-      _commit.diffs.add(_diff);
+      _commit!.diffs.add(_diff!);
       _diff = null;
     }
   }
@@ -117,21 +119,21 @@ class _GitPatchParserSink implements EventSink<String> {
 
   void _exitChunk() {
     if (_chunk != null) {
-      _diff.addLines.addAll(_chunk.addLines);
-      _diff.removeLines.addAll(_chunk.removeLines);
+      _diff!.addLines.addAll(_chunk!.addLines);
+      _diff!.removeLines.addAll(_chunk!.removeLines);
       _chunk = null;
     }
   }
 
   void _addLine(String line) {
     if (_chunk != null) {
-      _chunk.addLines.add(line.substring(1));
+      _chunk!.addLines.add(line.substring(1));
     }
   }
 
   void _removeLine(String line) {
     if (_chunk != null) {
-      _chunk.removeLines.add(line.substring(1));
+      _chunk!.removeLines.add(line.substring(1));
     }
   }
 
@@ -140,9 +142,11 @@ class _GitPatchParserSink implements EventSink<String> {
 }
 
 class GitPatchParser extends StreamTransformerBase<String, Commit> {
-  final Filter _filter;
+  final Filter? _filter;
 
-  GitPatchParser({Filter filter}) : _filter = filter;
+  GitPatchParser({
+    Filter? filter,
+  }) : _filter = filter;
 
   Stream<Commit> bind(Stream<String> stream) => Stream<Commit>.eventTransformed(
       stream,

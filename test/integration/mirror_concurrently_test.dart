@@ -10,8 +10,8 @@ import '../patches.dart';
 
 void main() {
   group('Mirror concurrently', () {
+    HiveMirror.init('.hive');
     test('same box', () async {
-      HiveMirror.init('.hive');
       await Hive.deleteBoxFromDisk('box');
 
       final source = Add2Remove1Patch.primitive();
@@ -26,7 +26,6 @@ void main() {
     });
 
     test('different boxes', () async {
-      HiveMirror.init('.hive');
       await Hive.deleteBoxFromDisk('box1');
       await Hive.deleteBoxFromDisk('box2');
 

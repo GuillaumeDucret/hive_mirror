@@ -7,26 +7,26 @@ import 'dart:io';
 import 'package:async/async.dart';
 
 abstract class GitPatchInterface {
-  Stream<List<int>> format([String baseRevision]);
+  Stream<List<int>> format([String? baseRevision]);
   bool filter(String filePath);
   dynamic decode(String filePath, String line);
   dynamic decodeKey(String filePath, String line);
 }
 
 class GitPatch implements GitPatchInterface {
-  final File _file;
-  final String _uriTemplate;
-  final String _initialBaseRevision;
-  final Filter _filter;
+  final File? _file;
+  final String? _uriTemplate;
+  final String? _initialBaseRevision;
+  final Filter? _filter;
   final PatchDecode _decode;
   final PatchDecodeKey _decodeKey;
 
   GitPatch.file(
     File file, {
-    Filter filter,
-    PatchDecode decode,
-    PatchDecodeKey decodeKey,
-  })  : _file = file,
+    Filter? filter,
+    required PatchDecode decode,
+    required PatchDecodeKey decodeKey,
+  })   : _file = file,
         _uriTemplate = null,
         _initialBaseRevision = null,
         _filter = filter,
@@ -36,10 +36,10 @@ class GitPatch implements GitPatchInterface {
   GitPatch.uri(
     String uriTemplate, {
     String initialBaseRevision = 'initial',
-    Filter filter,
-    PatchDecode decode,
-    PatchDecodeKey decodeKey,
-  })  : _file = null,
+    Filter? filter,
+    required PatchDecode decode,
+    required PatchDecodeKey decodeKey,
+  })   : _file = null,
         _uriTemplate = uriTemplate,
         _initialBaseRevision = initialBaseRevision,
         _filter = filter,
@@ -51,9 +51,9 @@ class GitPatch implements GitPatchInterface {
     String repoName, {
     String initialBaseRevision = 'initial',
     String compareRevision = 'master',
-    Filter filter,
-    PatchDecode decode,
-    PatchDecodeKey decodeKey,
+    Filter? filter,
+    required PatchDecode decode,
+    required PatchDecodeKey decodeKey,
   }) {
     final _uriTemplate =
         'https://github.com/$userName/$repoName/compare/\$baseRevision..$compareRevision.patch';
@@ -65,17 +65,17 @@ class GitPatch implements GitPatchInterface {
   }
 
   @override
-  Stream<List<int>> format([String baseRevision]) {
-    baseRevision ??= _initialBaseRevision;
-
+  Stream<List<int>> format([String? baseRevision]) {
     if (_file != null) {
-      return _file.openRead();
+      return _file!.openRead();
     }
 
     if (_uriTemplate != null) {
+      baseRevision ??= _initialBaseRevision;
+
       return LazyStream(() async {
-        final uri =
-            Uri.parse(_uriTemplate.replaceAll('\$baseRevision', baseRevision));
+        final uri = Uri.parse(
+            _uriTemplate!.replaceAll('\$baseRevision', baseRevision!));
         final request = await HttpClient().getUrl(uri);
         return request.close();
       });

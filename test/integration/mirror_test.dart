@@ -11,8 +11,8 @@ import '../patches.dart';
 
 void main() {
   group('Mirror', () {
+    HiveMirror.init('.hive');
     test('patch', () async {
-      HiveMirror.init('.hive');
       await Hive.deleteBoxFromDisk('box');
 
       final source = Add2Remove1Patch.primitive();
@@ -24,9 +24,8 @@ void main() {
     });
 
     test('file', () async {
-      HiveMirror.init('.hive');
       await Hive.deleteBoxFromDisk('box');
-      await Hive.deleteBoxFromDisk('.hive_mirror_metadata');
+      await Hive.deleteBoxFromDisk('.hive_mirror');
 
       final source = Load2FileDescriptor.primitive();
       await HiveMirror.mirror(source, BoxMirrorHandler<String>('box'));
